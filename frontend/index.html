@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NotifyQ — Notification Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Header ──────────────────────────────────────────── -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📬</div>
+      <div>
+        <div class="logo-text">NotifyQ</div>
+        <div class="logo-sub">Notification Dashboard</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main ────────────────────────────────────────────── -->
+  <main>
+    <p class="page-title">Actions</p>
+
+    <!-- Two-column action cards -->
+    <div class="grid-2">
+
+      <!-- Send Direct Mail -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon direct">⚡</div>
+          <div>
+            <div class="card-title">Send Direct</div>
+            <div class="card-desc">Send a test email immediately, bypassing the queue</div>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.7;">
+          Triggers <code style="background:var(--surface);padding:2px 6px;border-radius:4px;font-size:12px;color:#a5b4fc;">POST /send/mail</code>
+          which dispatches an email via Nodemailer and returns an
+          <strong style="color:var(--t1);">Ethereal preview link</strong> so you can inspect it instantly.
+        </p>
+
+        <button class="btn btn-primary" id="sendDirectBtn">
+          <span id="sendDirectBtnLabel">⚡ Send Test Email</span>
+        </button>
+
+        <div class="response-box" id="sendDirectResponse">
+          <div class="response-label" id="sendDirectResponseLabel"></div>
+          <div id="sendDirectResponseBody"></div>
+        </div>
+      </div>
+
+      <!-- Add to Queue -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon queue">📥</div>
+          <div>
+            <div class="card-title">Add to Queue</div>
+            <div class="card-desc">Push a notification job into the BullMQ Redis queue</div>
+          </div>
+        </div>
+
+        <form id="queueForm" novalidate>
+          <div class="form-group">
+            <label for="qEmail">Recipient Email</label>
+            <input type="email" id="qEmail" name="email" placeholder="user@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="qSubject">Subject</label>
+            <input type="text" id="qSubject" name="subject" placeholder="Your notification subject" required />
+          </div>
+          <div class="form-group">
+            <label for="qMessage">Message</label>
+            <textarea id="qMessage" name="message" placeholder="Write your notification message here…" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-success" id="queueBtn">
+            <span id="queueBtnLabel">📥 Add to Queue</span>
+          </button>
+
+          <div class="response-box" id="queueResponse">
+            <div class="response-label" id="queueResponseLabel"></div>
+            <div id="queueResponseBody"></div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Activity Log -->
+    <div class="card">
+      <div class="log-header">
+        <h2>Activity Log</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="log-count" id="logCount">0 events</span>
+          <button class="btn btn-ghost" id="clearLogBtn">Clear</button>
+        </div>
+      </div>
+
+      <div id="logEmpty" class="log-empty">
+        <div class="log-empty-icon">🗒️</div>
+        <div>No activity yet — send an email or add one to the queue</div>
+      </div>
+
+      <div class="log-list" id="logList" style="display:none;"></div>
+    </div>
+
+    <!-- Bull Board Dashboard -->
+    <div class="card dashboard-card">
+      <div class="card-head">
+        <div class="card-icon direct" style="font-size:22px;">📊</div>
+        <div>
+          <div class="card-title">Queue Dashboard</div>
+          <div class="card-desc">BullMQ visual monitor — inspect jobs, retries, DLQ, and throughput</div>
+        </div>
+      </div>
+
+      <div class="iframe-bar">
+        <span class="iframe-url">http://localhost:7777/admin/queues</span>
+        <div class="iframe-actions">
+          <button class="btn btn-ghost" id="reloadDashBtn">↺ Reload</button>
+          <a href="http://localhost:7777/admin/queues" target="_blank" class="btn btn-ghost" style="text-decoration:none;">↗ Open tab</a>
+        </div>
+      </div>
+
+      <div class="iframe-wrap">
+        <iframe
+          id="bullBoard"
+          src="http://localhost:7777/admin/queues"
+          title="BullMQ Dashboard"
+        ></iframe>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast container -->
+  <div id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

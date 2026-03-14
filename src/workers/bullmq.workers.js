@@ -9,7 +9,7 @@ function initWorker() {
         async (job) => {
             const { email, subject, message } = job.data;
             // console.log(job.data);
-            await sendMail();
+            await sendMail({email , subject , message});
         },
         {
             connection: redis,

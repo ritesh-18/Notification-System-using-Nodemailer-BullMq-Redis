@@ -2,14 +2,14 @@
 const {getTransporter} = require('../config/nodemail.config')
 const nodemailer = require('nodemailer')
 
-const sendMail=async()=>{
+const sendMail=async(body)=>{
     try {
         const transporter= getTransporter()
         const info = await transporter.sendMail({
                 from: '"Test Sender" <test@example.com>',
-                to: "recipient@example.com",
-                subject: "Test Email",
-                text: "This is a test email sent via Ethereal!",
+                to: `${body.email}`,
+                subject: `${body.subject}`,
+                text: `${body.message}`,
                 html: "<p>This is a <b>test email</b> sent via Ethereal!</p>",
             });
 

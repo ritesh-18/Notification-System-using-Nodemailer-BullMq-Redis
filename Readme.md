@@ -40,3 +40,8 @@ SMTP Provider
 - If you want to see dashboard of bullMq : ` http://localhost:7777/admin/queues `
 
 - Currently we have two endpoints one is for adding msg in msg queues `http://localhost:7777/add/notification` and another one is for manully triggers the mail notification `http://localhost:7777/send/mail`
+
+
+![alt text](image.png)
+
+![alt text](image-1.png)
